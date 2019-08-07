@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mymaps</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>My Geocode App</title>
+</head>
+
+<body>
+    
+<header>
+        <div class="logo"><a href="/">TruSponse</a></div>
+        <nav>
+            <ul>
+                <% if(!currentUser){ %>
+                    <li><a href="/login3">Log in</a></li>
+                    <% } else { %>  
+                        <li><a href = "#">Logged in as <%= currentUser.username %></a></li>
+                        <li><a href="/">Main</a></li>
+                        <li><a href="/prospects/new">New Prospect</a></li>
+                        <li><a href="/prospects">View Prospects</a></li>
+                        <li><a href="/logout">Sign Out</a></li>
+                        <% } %>
+            </ul>
+        </nav>
+        <div class="menu-toggle"><i class="fa fa-bars"></i></div>
+        </div>
+    </div>
+</header>
