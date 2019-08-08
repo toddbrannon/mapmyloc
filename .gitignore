@@ -1,9 +1,5 @@
-config
-models
+config/keys_dev.js
+
 node_modules
-views/file-upload.ejs
-views/index-COPY.ejs
-views/index.ejs
-views/index1.ejs
-views/login.ejs
+
 

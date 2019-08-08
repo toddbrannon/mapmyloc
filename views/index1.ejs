@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mymaps</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>My Geocode App</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card-block" style="margin:25px auto; background:#E9ECEF; padding: 25px 25px; min-height: 90vh;" id="location-block">
+                    <h2 style="text-align: center;">Enter Location: </h2>
+                        <form id="location-form">
+                            <input type="text" id="location-input" class="form-control form-control-lg">
+                            <br>
+                            <button type="submit" class="btn btn-primary btn-block" style="margin: 0 auto; width: 50%;">
+                            Submit
+                            </button>
+                        </form>
+                    <div class="card-block" style="margin:25px auto;" id="geometry"></div>
+                    <div class="card-block" id="map" style="height:400px; width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Call Geocode
+        //geocode();
+        
+        // Get location form
+        var locationForm = document.getElementById('location-form');
+        
+        // Listen for submit
+        locationForm.addEventListener('submit', geocode);
+
+        function geocode(e) {
+            // Prevent actual submit
+            e.preventDefault();
+            
+            var location = document.getElementById('location-input').value;
+            
+            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                    params: {
+                        address: location,
+                        key: 'AIzaSyA3a2Rc2t4xNF4L7YgQT-4JEJIgrrZ9ioU'
+                    }
+                })
+                .then(function(response) {
+                    // Log full response
+                    console.log(response);
+
+                    // Formatted Address
+                    var formattedAddress = response.data.results[0].formatted_address;
+                    var formattedAddressOutput = `
+                        <ul class="list-group">
+                            <li class="list-group-item">${formattedAddress}</li>
+                        </ul>
+                    `;
+
+                    // Address Components
+                    var addressComponents = response.data.results[0].address_components;
+                    var addressComponentsOutput = '<ul class="list-group">';
+                    for(var i = 0; i < addressComponents.length; i++){
+                        addressComponentsOutput += `
+                            <li class="list-group-item"><strong>${addressComponents[i].types[0]}</strong>: ${addressComponents[i].long_name}</li>
+                        `;
+                    }
+                    addressComponentsOutput += '<ul>';
+                    
+                    // Geometry
+                    var lat = response.data.results[0].geometry.location.lat;
+                    var lng = response.data.results[0].geometry.location.lng;
+                    var geometryOutput = `
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Latitude</strong>: ${lat}</li>
+                        </ul>
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Longitude</strong>: ${lng}</li>
+                        </ul>
+                    `;
+
+                    // Output to App
+                    document.getElementById('geometry').innerHTML = geometryOutput;
+                    
+                    function initMap(){
+                    // Map options
+                    var options = {
+                        zoom: 8,
+                        center:{lat:32.94118, lng:-97.0041059}
+                        
+                    }
+                    // New map
+                    var map = new
+                    google.maps.Map(document.getElementById('map', options));
+                    console.log("The latitude is " + lat + ".");
+                                
+                    // Add marker
+                    var marker = new google.maps.Marker({
+                        position:{lat:32.94118, lng:-97.0041059},
+                        map:map
+                    });
+                }
+                    
+                    // Run initMap function
+                    initMap();
+                    
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3a2Rc2t4xNF4L7YgQT-4JEJIgrrZ9ioU&callback=initMap"
+    async defer></script>
+</body>
+
+</html>
